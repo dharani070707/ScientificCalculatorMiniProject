@@ -1,0 +1,21 @@
+---
+- name: Deploy Calculator App
+  hosts: servers
+  become: yes
+
+  tasks:
+    - name: Install Docker
+      apt:
+        name: docker.io
+        state: present
+
+    - name: Pull Docker Image
+      docker_image:
+        name: dharaniprasads/scientific-calculator
+        source: pull
+
+    - name: Run Container
+      docker_container:
+        name: calculator
+        image: dharaniprasads/scientific-calculator
+        state: started
