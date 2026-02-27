@@ -1,33 +1,16 @@
 pipeline {
-   agent {
+    agent {
         docker {
             image 'maven:3.9.6-eclipse-temurin-17'
+            args '-v /var/run/docker.sock:/var/run/docker.sock'
         }
     }
 
     environment {
         IMAGE_NAME = "scientific-calculator"
-    } 
+    }
 
     stages {
-	stage('Install Tools') {
-            steps {
-                sh '''
-                    sudo apt update
-                    sudo apt install -y openjdk-17-jdk
-                    sudo apt install -y maven
-                '''
-            }
-        }
-
-        stage('Verify Tools') {
-            steps {
-                sh '''
-                    java -version
-                    mvn -version
-                '''
-            }
-        }
 
         stage('Checkout') {
             steps {
@@ -35,29 +18,21 @@ pipeline {
             }
         }
 
-        stage('Build') {
+        stage('Build & Test') {
             steps {
                 sh 'mvn clean package'
-            }
-        }
-
-        stage('Test') {
-            steps {
-                sh 'mvn test'
             }
         }
 
         stage('Docker Build & Push') {
             steps {
                 withCredentials([usernamePassword(
-                    credentialsId: 'DockerHubCred',
+                    credentialsId: 'DockerHubCred',  
                     usernameVariable: 'DOCKER_USER',
                     passwordVariable: 'DOCKER_PASS'
                 )]) {
-
                     sh '''
                         IMAGE_TAG=$DOCKER_USER/$IMAGE_NAME:latest
-                        
                         docker build -t $IMAGE_TAG .
                         echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
                         docker push $IMAGE_TAG
