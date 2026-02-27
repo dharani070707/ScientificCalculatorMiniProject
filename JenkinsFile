@@ -1,16 +1,29 @@
 pipeline {
     agent any
 
-    tools {
-        jdk 'JDK17'
-        maven 'Maven3'
-    }
-
     environment {
         IMAGE_NAME = "scientific-calculator"
     }
 
     stages {
+	stage('Install Tools') {
+            steps {
+                sh '''
+                    sudo apt update
+                    sudo apt install -y openjdk-17-jdk
+                    sudo apt install -y maven
+                '''
+            }
+        }
+
+        stage('Verify Tools') {
+            steps {
+                sh '''
+                    java -version
+                    mvn -version
+                '''
+            }
+        }
 
         stage('Checkout') {
             steps {
