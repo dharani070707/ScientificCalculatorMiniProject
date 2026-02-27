@@ -14,7 +14,8 @@ pipeline {
 
         stage('Checkout') {
             steps {
-                git 'https://github.com/dharani070707/ScientificCalculatorMiniProject.git'
+                git branch: 'main',
+                    url: 'https://github.com/dharani070707/ScientificCalculatorMiniProject.git'
             }
         }
 
