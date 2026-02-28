@@ -1,6 +1,6 @@
 package com.example;
 import java.util.Scanner;
-
+//final code
 public class Calculator {
 
     public static double squareRoot(double x) {
