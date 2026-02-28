@@ -6,13 +6,13 @@ pipeline {
     }
 
     stages {
-
         stage('Checkout') {
             steps {
                 git branch: 'main',
                     url: 'https://github.com/dharani070707/ScientificCalculatorMiniProject.git'
             }
         }
+
         stage('Build') {
             steps {
                 sh 'mvn clean compile'
@@ -21,14 +21,7 @@ pipeline {
 
         stage('Test') {
             steps {
-                script {
-                    try {
-                        sh 'mvn test'
-                    } catch (err) {
-                        currentBuild.result = 'FAILURE'
-                        throw err
-                    }
-                }
+                sh 'mvn test'
             }
         }
 
@@ -59,24 +52,18 @@ pipeline {
             }
         }
     }
+
     post {
-        always {
-        echo "Post block executed"
-    }
+        failure {
+            mail to: 'dharaniprasads07@gmail.com',
+                 subject: "Build Failed ${env.BUILD_NUMBER}",
+                 body: "Build failed at ${env.BUILD_URL}"
+        }
 
-    failure {
-        emailext(
-            subject: "❌ Build Failed: ${env.JOB_NAME}",
-            body: "Build failed at ${env.BUILD_URL}",
-            to: "dharani.prasad@iiitb.ac.in"
-        )
-    }
-
-    fixed {
-        emailext(
-            subject: "✅ Build Fixed: ${env.JOB_NAME}",
-            body: "Build fixed at ${env.BUILD_URL}",
-            to: "dharani.prasad@iiitb.ac.in"
-        )
+        fixed {
+            mail to: 'dharaniprasads07@gmail.com',
+                 subject: "Build Fixed ${env.BUILD_NUMBER}",
+                 body: "Build fixed at ${env.BUILD_URL}"
+        }
     }
 }
