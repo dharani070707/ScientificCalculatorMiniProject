@@ -21,11 +21,13 @@ pipeline {
 
         stage('Test') {
             steps {
-                try {
-                    sh 'mvn test'
-                } catch (err) {
-                    currentBuild.result = 'FAILURE'
-                    throw err
+                script {
+                    try {
+                        sh 'mvn test'
+                    } catch (err) {
+                        currentBuild.result = 'FAILURE'
+                        throw err
+                    }
                 }
             }
         }
