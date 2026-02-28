@@ -3,9 +3,11 @@ pipeline {
 
     environment {
         IMAGE_NAME = "scientific-calculator"
+        DOCKER_IMAGE = "dharaniprasads/scientific-calculator:latest"
     }
 
     stages {
+
         stage('Checkout') {
             steps {
                 git branch: 'main',
@@ -33,7 +35,7 @@ pipeline {
 
         stage('Docker Build') {
             steps {
-                sh 'docker build -t dharaniprasads/scientific-calculator:latest .'
+                sh "docker build -t ${DOCKER_IMAGE} ."
             }
         }
 
@@ -44,26 +46,29 @@ pipeline {
                     usernameVariable: 'DOCKER_USER',
                     passwordVariable: 'DOCKER_PASS'
                 )]) {
-                    sh '''
-                        echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
-                        docker push dharaniprasads/scientific-calculator:latest
-                    '''
+                    sh """
+                        echo \$DOCKER_PASS | docker login -u \$DOCKER_USER --password-stdin
+                        docker push ${DOCKER_IMAGE}
+                    """
                 }
             }
         }
     }
 
+    //can involve failure or success to send only when failure or back success 
     post {
-        failure {
-            mail to: 'dharani.prasad@iiitb.ac.in',
-                 subject: "Build Failed ${env.BUILD_NUMBER}",
-                 body: "Build failed at ${env.BUILD_URL}"
-        }
+        always {
+            mail to: 'dharaniprasads07@gmail.com',
+                 subject: "Build ${currentBuild.currentResult}: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                 body: """
+Build Status: ${currentBuild.currentResult}
 
-        fixed {
-            mail to: 'dharani.prasad@iiitb.ac.in',
-                 subject: "Build Fixed ${env.BUILD_NUMBER}",
-                 body: "Build fixed at ${env.BUILD_URL}"
+Project: ${env.JOB_NAME}
+Build Number: ${env.BUILD_NUMBER}
+Build URL: ${env.BUILD_URL}
+
+Docker Image: ${DOCKER_IMAGE}
+"""
         }
     }
 }
