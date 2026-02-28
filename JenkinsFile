@@ -55,13 +55,13 @@ pipeline {
 
     post {
         failure {
-            mail to: 'dharaniprasads07@gmail.com',
+            mail to: 'dharani.prasad@iiitb.ac.in',
                  subject: "Build Failed ${env.BUILD_NUMBER}",
                  body: "Build failed at ${env.BUILD_URL}"
         }
 
         fixed {
-            mail to: 'dharaniprasads07@gmail.com',
+            mail to: 'dharani.prasad@iiitb.ac.in',
                  subject: "Build Fixed ${env.BUILD_NUMBER}",
                  body: "Build fixed at ${env.BUILD_URL}"
         }
