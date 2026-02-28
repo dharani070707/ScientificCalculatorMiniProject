@@ -13,14 +13,31 @@ pipeline {
                     url: 'https://github.com/dharani070707/ScientificCalculatorMiniProject.git'
             }
         }
-
-        stage('Build & Test') {
+        stage('Build') {
             steps {
-                sh 'mvn clean package'
+                sh 'mvn clean compile'
             }
         }
 
-        stage('Docker Build & Push') {
+        stage('Test') {
+            steps {
+                sh 'mvn test'
+            }
+        }
+
+        stage('Package') {
+            steps {
+                sh 'mvn package -DskipTests'
+            }
+        }
+
+        stage('Docker Build') {
+            steps {
+                sh 'docker build -t dharaniprasads/scientific-calculator:latest .'
+            }
+        }
+
+        stage('Docker Push') {
             steps {
                 withCredentials([usernamePassword(
                     credentialsId: 'DockerHubCred',
@@ -28,10 +45,8 @@ pipeline {
                     passwordVariable: 'DOCKER_PASS'
                 )]) {
                     sh '''
-                        IMAGE_TAG=$DOCKER_USER/$IMAGE_NAME:latest
-                        docker build -t $IMAGE_TAG .
                         echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
-                        docker push $IMAGE_TAG
+                        docker push dharaniprasads/scientific-calculator:latest
                     '''
                 }
             }
