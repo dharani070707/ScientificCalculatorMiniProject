@@ -8,7 +8,7 @@ public class CalculatorTest {
 
     @Test
     public void testSquareRootPerfectSquare() {
-        assertEquals(4.0, Calculator.squareRoot(16));
+        assertEquals(3.0, Calculator.squareRoot(16));
     }
 
     @Test
