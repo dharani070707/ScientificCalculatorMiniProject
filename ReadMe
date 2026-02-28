@@ -3,5 +3,5 @@ Then i use ansible to pull and create a container with that image
 Then i run the container which gives me a interface for calculator
 
 Running jenkins Manually at Jenkins page 
-To run ansible - ansible-playbook -i inventory.ini Deploy.yml
+To run ansible - ansible-playbook -i inventory.ini Deploy.yml --ask-become-pass
 To run the container - docker run -it dharaniprasads/scientific-calculator  
