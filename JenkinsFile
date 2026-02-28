@@ -57,7 +57,7 @@ pipeline {
             emailext (
                 subject: "❌ Build Failed: ${env.JOB_NAME}",
                 body: "Build failed at ${env.BUILD_URL}",
-                to: "prasadsdharani@gmail.com"
+                to: "dharani.prasad@iiitb.ac.in"
             )
         }
 
@@ -65,7 +65,7 @@ pipeline {
             emailext (
                 subject: "✅ Build Fixed: ${env.JOB_NAME}",
                 body: "Build fixed at ${env.BUILD_URL}",
-                to: "prasadsdharani@gmail.com"
+                to: "dharani.prasad@iiitb.ac.in"
             )
         }
     }
