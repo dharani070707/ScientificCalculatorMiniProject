@@ -7,3 +7,7 @@ To run ansible - ansible-playbook -i inventory.ini Deploy.yml --ask-become-pass
 To run the container - docker run -it dharaniprasads/scientific-calculator  
 
 Enabled mail and github webhooks successfully
+Make sure to run ngrok first 
+
+ngrok http 8080
+
