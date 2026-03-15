@@ -6,8 +6,8 @@ Running jenkins Manually at Jenkins page
 To run ansible - ansible-playbook -i inventory.ini Deploy.yml --ask-become-pass
 To run the container - docker run -it dharaniprasads/scientific-calculator  
 
+ngrok http 8080
 Enabled mail and github webhooks successfully
 Make sure to run ngrok first 
 
-ngrok http 8080
 
